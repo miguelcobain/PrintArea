@@ -46,6 +46,7 @@
 
     $.fn.printArea = function( options )
     {
+        var deferred = new $.Deferred();
         $.extend( settings, defaults, options );
 
         counter++;
@@ -60,7 +61,9 @@
 
         PrintArea.write( PrintAreaWindow.doc, $printSource );
 
-        setTimeout( function () { PrintArea.print( PrintAreaWindow ); }, 1000 );
+        setTimeout( function () { PrintArea.print( PrintAreaWindow ); deferred.resolve() }, 1000 );
+
+        return deferred.promise();
     };
 
     var PrintArea = {
