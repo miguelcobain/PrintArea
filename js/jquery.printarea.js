@@ -99,18 +99,20 @@
 
             if ( settings.extraHead ) settings.extraHead.replace( /([^,]+)/g, function(m){ extraHead += m });
 
-            $(document).find("link")
-                .filter(function(){ // Requirement: <link> element MUST have rel="stylesheet" to be considered in print document
-                        var relAttr = $(this).attr("rel");
-                        return ($.type(relAttr) === 'undefined') == false && relAttr.toLowerCase() == 'stylesheet';
-                    })
-                .filter(function(){ // Include if media is undefined, empty, print or all
-                        var mediaAttr = $(this).attr("media");
-                        return $.type(mediaAttr) === 'undefined' || mediaAttr == "" || mediaAttr.toLowerCase() == 'print' || mediaAttr.toLowerCase() == 'all'
-                    })
-                .each(function(){
-                        links += '<link type="text/css" rel="stylesheet" href="' + $(this).attr("href") + '" >';
-                    });
+            if (settings.links) {
+              $(document).find("link")
+                  .filter(function(){ // Requirement: <link> element MUST have rel="stylesheet" to be considered in print document
+                          var relAttr = $(this).attr("rel");
+                          return ($.type(relAttr) === 'undefined') == false && relAttr.toLowerCase() == 'stylesheet';
+                      })
+                  .filter(function(){ // Include if media is undefined, empty, print or all
+                          var mediaAttr = $(this).attr("media");
+                          return $.type(mediaAttr) === 'undefined' || mediaAttr == "" || mediaAttr.toLowerCase() == 'print' || mediaAttr.toLowerCase() == 'all'
+                      })
+                  .each(function(){
+                          links += '<link type="text/css" rel="stylesheet" href="' + $(this).attr("href") + '" >';
+                      });
+            }
             if ( settings.extraCss ) settings.extraCss.replace( /([^,\s]+)/g, function(m){ links += '<link type="text/css" rel="stylesheet" href="' + m + '">' });
 
             return "<head><title>" + settings.popTitle + "</title>" + extraHead + links + "</head>";
